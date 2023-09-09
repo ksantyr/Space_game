@@ -4,12 +4,7 @@ import numpy as np
 
 # Función para detectar el color en la imagen
 def color(frame, tamaño):
-    # Definir el rango de color naranja en formato HSV
-    """
-    #Color naranja
-    inferior = np.array([5, 100, 100],np.uint8)  # Valor mínimo de matiz, saturación y valor
-    superior = np.array([15, 255, 255],np.uint8)  # Valor máximo de matiz, saturación y valor
-    """
+
     # Definir un rango de color verde en HSV, color de referencia
     inferior = np.array([60, 100, 20],np.uint8)  # Matiz mínimo, Saturación mínima, Valor mínimo [164,61,71]    [35, 90, 20]
     superior = np.array([90, 255, 255],np.uint8)  # Matiz máximo, Saturación máxima, Valor máximo [164,61,71]   [85, 255, 255]
@@ -27,14 +22,6 @@ def color(frame, tamaño):
     mascara = cv2.inRange(hsv, inferior, superior)
 
     return mascara, frame_espejo, hsv
-
-
-"""
-# Configurar el tamaño del fotograma capturado
-camara.set(3, 400)
-camara.set(4, 400)
-"""
-
 
 #Coordenadas del objeto
 cX = 0
@@ -60,15 +47,6 @@ def lectura(jugador, tamano, camara):
         area = cv2.contourArea(contorno)
 
         if area > 2000:  # Desprecia los objetos pequeños para segmentar el deseado
-        
-            """
-            # Encontrar el rectángulo que enmarca el área de detección naranja
-            x, y, w, h = cv2.boundingRect(contorno)
-
-            # Dibujar un cuadro alrededor del área de detección naranja en el fotograma original
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 165, 255), 2)  # Naranja en formato BGR
-            """
-            
             M = cv2.moments(contorno)
             if M["m00"] == 0: M["m00"] =1 #Para evitar divisiones por cero
             cX = int(M["m10"] / M["m00"])
@@ -86,9 +64,6 @@ def lectura(jugador, tamano, camara):
             #...............
             jugador.posicion(cX,cY)
             #sprites.update(ventana)
-            
-            
-        
 
     # Crear una imagen binaria donde el objeto naranja es blanco y el resto negro
     binario = cv2.bitwise_and(hsv, hsv, mask=mascara)
@@ -99,8 +74,7 @@ def lectura(jugador, tamano, camara):
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         run=False
-    
-    
+
     return run
     
     
