@@ -30,7 +30,7 @@ class Jugador(pygame.sprite.Sprite):
         if self.rect.left < 0:
             self.rect.left = 0
         if self.rect.right > self.tamano_ventana[0]:
-            self.rect.right = self.tamano_ventana[0]
+            self.rect.right = 1024
         if self.rect.top < 0:
             self.rect.top = 0
         if self.rect.bottom > self.tamano_ventana[1]:

@@ -5,6 +5,7 @@ import classmoneda
 import procesado
 import cv2
 import classjugador
+import estados
 
 pygame.init() # inicializamos la libreria de pygame
 tamano = (1400,800)  # tamaño de la ventana
@@ -13,7 +14,7 @@ reloj = pygame.time.Clock()
 
 ventana = pygame.display.set_mode(tamano) # creación de la ventana
 #ventana.fill((255,255,255)) # color blanco en la ventana
-fondo = pygame.image.load(ruta_fondo).convert() # imagen de fondo del juego
+fondo = pygame.image.load(ruta_fondo) # imagen de fondo del juego
 
 pygame.display.set_caption("Space Game") #Titulo de la ventana
 
@@ -29,6 +30,8 @@ monedas = pygame.sprite.Group() #Grupo con todos los objetos de monedas
 # configuración del temporizador para las monedas
 generador_monedas = pygame.USEREVENT + 2  # Evento personalizado
 pygame.time.set_timer(generador_monedas, 3000)  # Generar cada 3 segundos (3000 milisegundos)
+
+
 
 #Grupo con todos los sprites
 sprites = pygame.sprite.Group()
@@ -50,9 +53,14 @@ font_vidas = pygame.font.Font(None,36)
 vidas = 3 
 running = True
 
-while running:
-    ventana.blit(fondo,[0,0]) # proyección de la imagen de fondo
+estado = "inicio"
+# Escala la imagen de fondo para que coincida con las dimensiones de la ventana
+fondo = pygame.transform.scale(fondo, (1024,800))
 
+
+while running:
+    
+    ventana.blit(fondo,(0,0)) # proyección de la imagen de fondo
     for evento in pygame.event.get(): # registro de eventos dentro de la ventana
 
         if evento.type == pygame.QUIT: # cerrar la ventana
@@ -74,32 +82,66 @@ while running:
             moneda = classmoneda.Moneda(tamano) #Genera un objeto moneda
             monedas.add(moneda)#lo añade al grupo de monedas
             sprites.add(moneda) #lo añade al grupo que contiene todos los sprites
-            
-    running= procesado.lectura(jugador, tamano,camara)
-    
-    #Comprueba una colision del enemigo con el jugador
-    colisiones = pygame.sprite.spritecollide(jugador, meteoritos, True)
-    if colisiones:
-        if vidas > 0:
-            vidas -= 1 # secrestan las vidas al detectr colisiones con meteoritos
-   
-    # Verificar colisión con nedasmo y actualizar la puntuación, el true elimina el enemigo verde de la pantalla
-    colisiones_monedas = pygame.sprite.spritecollide(jugador, monedas, True) #Devuelve una lista con el numero de colisiones
-    if colisiones_monedas:
-        #Revisa con cuantas colisiono y multiplica por 10 (para dar la puntuacion en multiplos de 10)
-        puntuacion += (len(colisiones_monedas)) * 10
-        #Cada moneda da 10 puntos
         
-    #Actualizar la posicion de todos los sprites
-    sprites.update()
-    # Dibujar todos los sprites en la pantalla
-    sprites.draw(ventana)
-
-    # Mostrar la puntuación en la esquina inferior derecha
-    mensaje_puntuacion = font_punt.render(f"Puntuación: {puntuacion}", True, (255, 255, 255))
-    ventana.blit(mensaje_puntuacion, (tamano[0] - 570, tamano[1] - 50))
-
-    mensaje_vidas = font_punt.render("Vidas: {}".format(vidas),True,(255,255,255))
-    ventana.blit(mensaje_vidas, (tamano[0] - 570, tamano[1] - 100))
+        elif evento.type == pygame.KEYDOWN: #Revisa si se presiona una tecla
+            if estado == "inicio" and evento.key == pygame.K_RETURN:
+                estado = "jugando"
+        
+            
+            
+            
+    if estado == "inicio": 
+        estados.start(ventana,font_punt)
+        
+        
+    elif estado == "jugando":
+        running,frame_py= procesado.lectura(jugador, tamano,camara)
+        ventana.blit(frame_py, (1024,0))
+        
+        
+        #Comprueba una colision del enemigo con el jugador
+        colisiones = pygame.sprite.spritecollide(jugador, meteoritos, True)
+        if colisiones:
+            if vidas > 0:
+                vidas -= 1 # secrestan las vidas al detectr colisiones con meteoritos
+            if vidas == 0:
+                estado = "fin"
+       
+        # Verificar colisión con nedasmo y actualizar la puntuación, el true elimina el enemigo verde de la pantalla
+        colisiones_monedas = pygame.sprite.spritecollide(jugador, monedas, True) #Devuelve una lista con el numero de colisiones
+        if colisiones_monedas:
+            #Revisa con cuantas colisiono y multiplica por 10 (para dar la puntuacion en multiplos de 10)
+            puntuacion += (len(colisiones_monedas)) * 10
+            #Cada moneda da 10 puntos
+            
+        #Actualizar la posicion de todos los sprites
+        sprites.update()
+        # Dibujar todos los sprites en la pantalla
+        sprites.draw(ventana)
+    
+        # Mostrar la puntuación en la esquina inferior derecha
+        mensaje_puntuacion = font_punt.render(f"Puntuación: {puntuacion}", True, (255, 255, 255))
+        ventana.blit(mensaje_puntuacion, (tamano[0] - 570, tamano[1] - 50))
+    
+        mensaje_vidas = font_punt.render("Vidas: {}".format(vidas),True,(255,255,255))
+        ventana.blit(mensaje_vidas, (tamano[0] - 570, tamano[1] - 100))
+        
+        
+        reloj.tick(250)
+        
+        
+    elif estado == "fin":
+        estados.gameOver(ventana,font_punt)
+    
+    
+    
     pygame.display.flip() # actualización de la pantalla
-    reloj.tick(250)
+        
+
+
+
+
+
+
+
+
