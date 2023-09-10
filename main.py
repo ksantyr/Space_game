@@ -23,6 +23,8 @@ meteoritos = pygame.sprite.Group() #Grupo con todos los objetos de meteoritos
 # Configuración del temporizador para meteoritos
 generador_meteoritos = pygame.USEREVENT + 1  # Evento personalizado
 pygame.time.set_timer(generador_meteoritos, 1300)  # Generar cada 1.3 segundos (1300 milisegundos)
+sonido_meteorito = pygame.mixer.Sound("sonidos/asteroid-hitting-something-152511.mp3") # sonido de colision con meteorito
+
 
 #monedas = [classmoneda.Moneda()] # lista con todos las monedas generadas
 monedas = pygame.sprite.Group() #Grupo con todos los objetos de monedas
@@ -30,13 +32,10 @@ monedas = pygame.sprite.Group() #Grupo con todos los objetos de monedas
 # configuración del temporizador para las monedas
 generador_monedas = pygame.USEREVENT + 2  # Evento personalizado
 pygame.time.set_timer(generador_monedas, 3000)  # Generar cada 3 segundos (3000 milisegundos)
-
-
+sonido_monedas = pygame.mixer.Sound("sonidos/moneda.mpeg")
 
 #Grupo con todos los sprites
 sprites = pygame.sprite.Group()
-jugador  = classjugador.Jugador(tamano)
-sprites.add(jugador)
 
 # Inicializar la cámara (por defecto)
 camara = cv2.VideoCapture(0)
@@ -53,14 +52,21 @@ font_vidas = pygame.font.Font(None,36)
 vidas = 3 
 running = True
 
+#condiciones iniciales del bucle principal
 estado = "inicio"
-# Escala la imagen de fondo para que coincida con las dimensiones de la ventana
-fondo = pygame.transform.scale(fondo, (1024,800))
+validar = 0
+
+# Configuracion de 3 canalas pera reproducie sonidos simultaneos
+pygame.mixer.set_num_channels(3)
+sonido_juego = pygame.mixer.Sound("sonidos/juego.mpeg")
+sonido_inicio = pygame.mixer.Sound("sonidos/inicio.mpeg")
+canal1 = pygame.mixer.Channel(0)
+canal2 = pygame.mixer.Channel(1)
+canal3 = pygame.mixer.Channel(2)
 
 
 while running:
     
-    ventana.blit(fondo,(0,0)) # proyección de la imagen de fondo
     for evento in pygame.event.get(): # registro de eventos dentro de la ventana
 
         if evento.type == pygame.QUIT: # cerrar la ventana
@@ -71,42 +77,50 @@ while running:
             sys.exit()
             running = False
 
-        elif evento.type == generador_meteoritos: # registro de la generación de los meteoritos
+        elif evento.type == generador_meteoritos and estado == "jugando": # registro de la generación de los meteoritos
             #meteoritos.append(classmeteorito.Meteorito()) # generamos un meteorito
             meteorito = classmeteorito.Meteorito(tamano) #Genera un objeto meteorito
             meteoritos.add(meteorito) #lo añade al grupo de meteoritos
             sprites.add(meteorito) #lo añade al grupo que contiene todos los sprites
             
-        elif evento.type == generador_monedas:# registro de la generación de las monedas
+        elif evento.type == generador_monedas and estado == "jugando":# registro de la generación de las monedas
             #monedas.append(classmoneda.Moneda())# generamos una moneda
             moneda = classmoneda.Moneda(tamano) #Genera un objeto moneda
             monedas.add(moneda)#lo añade al grupo de monedas
             sprites.add(moneda) #lo añade al grupo que contiene todos los sprites
         
         elif evento.type == pygame.KEYDOWN: #Revisa si se presiona una tecla
+            canal1.play(sonido_juego)
             if estado == "inicio" and evento.key == pygame.K_RETURN:
                 estado = "jugando"
-            elif estado == "fin" and evento.key == pygame.K_RETURN:
+                jugador  = classjugador.Jugador(tamano)
+                sprites.add(jugador)
+            elif estado == "fin" and evento.key == pygame.K_RETURN: # reestablecemos valores
+                jugador  = classjugador.Jugador(tamano)
+                sprites.add(jugador)
                 estado = "jugando"
                 vidas = 3
-        
-            
-            
-            
+                puntuacion = 0
+
     if estado == "inicio": 
-        estados.start(ventana,font_punt)
         
+        estados.start(ventana,font_punt)
+        if validar == 0: # se reproduce solo una vez el sonido inicial
+            # sonido de inicio
+            sonido_inicio.play()
+            validar = 1
         
     elif estado == "jugando":
+        ventana.blit(fondo,(0,0)) # proyección de la imagen de fondo
         running,frame_py, frame_bin= procesado.lectura(jugador, tamano,camara)
-        ventana.blit(frame_py, (1024,0))
+        # ubicacion de las camaras
+        ventana.blit(frame_py, (1024,0)) 
         ventana.blit(frame_bin, (1024,410))
-        
-        
         
         #Comprueba una colision del enemigo con el jugador
         colisiones = pygame.sprite.spritecollide(jugador, meteoritos, True)
         if colisiones:
+            canal2.play(sonido_meteorito) # reproducir sonido de la colision
             if vidas > 0:
                 vidas -= 1 # secrestan las vidas al detectr colisiones con meteoritos
             if vidas == 0:
@@ -115,6 +129,7 @@ while running:
         # Verificar colisión con nedasmo y actualizar la puntuación, el true elimina el enemigo verde de la pantalla
         colisiones_monedas = pygame.sprite.spritecollide(jugador, monedas, True) #Devuelve una lista con el numero de colisiones
         if colisiones_monedas:
+            canal3.play(sonido_monedas) # sonido al detectar colisiones
             #Revisa con cuantas colisiono y multiplica por 10 (para dar la puntuacion en multiplos de 10)
             puntuacion += (len(colisiones_monedas)) * 10
             #Cada moneda da 10 puntos
@@ -127,19 +142,20 @@ while running:
         # Mostrar la puntuación en la esquina inferior derecha
         mensaje_puntuacion = font_punt.render(f"Puntuación: {puntuacion}", True, (255, 255, 255))
         ventana.blit(mensaje_puntuacion, (tamano[0] - 570, tamano[1] - 50))
-    
+
+        # Mostrar las vidas en la esquina inferior derecha
         mensaje_vidas = font_punt.render("Vidas: {}".format(vidas),True,(255,255,255))
         ventana.blit(mensaje_vidas, (tamano[0] - 570, tamano[1] - 100))
-        
-        
         reloj.tick(250)
-        
         
     elif estado == "fin":
         estados.gameOver(ventana,font_punt)
-    
-    
-    
+        for i in sprites: # destruccion de objetos
+            i.__del__()
+        for i in meteoritos:
+            i.__del__()
+        sprites.empty() 
+        meteoritos.empty()
     pygame.display.flip() # actualización de la pantalla
         
 

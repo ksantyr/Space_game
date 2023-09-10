@@ -36,4 +36,5 @@ class Jugador(pygame.sprite.Sprite):
         if self.rect.bottom > self.tamano_ventana[1]:
             self.rect.bottom = self.tamano_ventana[1]
     
-
+    def __del__(self): # destructor
+        print('cohete eliminado')
