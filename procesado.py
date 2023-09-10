@@ -17,10 +17,9 @@ def color(frame, tamano):
     
     #Frame que se muestra en el juego
     frame_redimensionado2 = cv2.resize(frame_redimensionado, (376,376))
-    frame_py = np.rot90(frame_redimensionado2)
-    #frame_py = cv2.flip(frame_redimensionado2, 1)
+    frame_redimensionado2 = cv2.cvtColor(frame_redimensionado2, cv2.COLOR_BGR2RGB) #Convierte a rgb
+    frame_py = np.rot90(frame_redimensionado2)    
     
-    frame_py = pygame.surfarray.make_surface(frame_py)
     
     
     # Convertir la imagen a espacio de color HSV
@@ -75,15 +74,26 @@ def lectura(jugador, tamano, camara):
 
     # Crear una imagen binaria donde el objeto naranja es blanco y el resto negro
     binario = cv2.bitwise_and(hsv, hsv, mask=mascara)
+    
+    #Frame que se muestra en el juego
+    frame_redimensionado3 = cv2.resize(binario, (376,376))
+    frame_redimensionado3 = cv2.cvtColor(frame_redimensionado3, cv2.COLOR_BGR2RGB)
+    frame_redimensionado3 = cv2.flip(frame_redimensionado3, 1)
+    frame_bin = np.rot90(frame_redimensionado3)    
+    frame_bin = pygame.surfarray.make_surface(frame_bin)
+    
+    frame_py = pygame.surfarray.make_surface(frame_py)
 
+    """
     # Mostrar dos ventanas separadas: una con la detección de color naranja y otra con la imagen binaria
     cv2.imshow("Orange Color Detection", frame_espejo)
     cv2.imshow("Orange Binary Image", binario)
+    """
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         run=False
 
-    return run, frame_py
+    return run, frame_py, frame_bin
     
     
 

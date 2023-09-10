@@ -22,5 +22,8 @@ def gameOver(ventana,fuente):
     # Muestra el Fin de juego
     mensaje = fuente.render("Game Over", True, (255, 255, 255))
     ventana.blit(mensaje, (1024//2, 800//2))
+    
+    mensaje = fuente.render("Presione enter para volver a jugar", True, (255, 255, 255))
+    ventana.blit(mensaje, (1024//2, 900//2))
 
 

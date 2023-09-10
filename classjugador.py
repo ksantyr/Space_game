@@ -29,7 +29,7 @@ class Jugador(pygame.sprite.Sprite):
         # Actualizar la posición del jugador con límites en los bordes de la pantalla
         if self.rect.left < 0:
             self.rect.left = 0
-        if self.rect.right > self.tamano_ventana[0]:
+        if self.rect.right > 1024:
             self.rect.right = 1024
         if self.rect.top < 0:
             self.rect.top = 0

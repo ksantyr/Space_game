@@ -13,7 +13,7 @@ ruta_fondo = 'Imagenes/espacio3.jpeg' #ruta de la imagen de fondo
 reloj = pygame.time.Clock()
 
 ventana = pygame.display.set_mode(tamano) # creación de la ventana
-#ventana.fill((255,255,255)) # color blanco en la ventana
+ventana.fill((255,255,255)) # color blanco en la ventana
 fondo = pygame.image.load(ruta_fondo) # imagen de fondo del juego
 
 pygame.display.set_caption("Space Game") #Titulo de la ventana
@@ -86,6 +86,9 @@ while running:
         elif evento.type == pygame.KEYDOWN: #Revisa si se presiona una tecla
             if estado == "inicio" and evento.key == pygame.K_RETURN:
                 estado = "jugando"
+            elif estado == "fin" and evento.key == pygame.K_RETURN:
+                estado = "jugando"
+                vidas = 3
         
             
             
@@ -95,8 +98,10 @@ while running:
         
         
     elif estado == "jugando":
-        running,frame_py= procesado.lectura(jugador, tamano,camara)
+        running,frame_py, frame_bin= procesado.lectura(jugador, tamano,camara)
         ventana.blit(frame_py, (1024,0))
+        ventana.blit(frame_bin, (1024,410))
+        
         
         
         #Comprueba una colision del enemigo con el jugador
