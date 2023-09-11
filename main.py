@@ -1,3 +1,20 @@
+#-------------------------------------------------------------------------------------------------
+#------- Juego Yellow Ball -----------------------------------------------------------------------
+#------- Coceptos básicos de PDI------------------------------------------------------------------
+#------- Por: Victor Manuel Arbeláez Ramírez  victor.arbelaez@udea.edu.co ------------------------
+#-------      Kevin Santiago Restrepo Alzate  Kevin.restrepo2@udea.edu.co-------------------------
+#------- Presentado a: David Stephen Fernández MC CAN --------------------------------------------
+#-------      Profesor Facultad de Ingenieria BLQ 21-409  ----------------------------------------
+#-------      CC 71629489, Tel 2198528,  Wpp 3007106588 ------------------------------------------
+#------- Curso Básico de Procesamiento de Imágenes y Visión Artificial----------------------------
+#------- Septiembre de 2023-----------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------
+
+
+#-------------------------------------------------------------------------------------------------
+#--1. Inicializo el sistema ----------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------
+
 import pygame
 import sys
 import classmeteorito
@@ -8,6 +25,11 @@ import classjugador
 import estados
 
 pygame.init() # inicializamos la libreria de pygame
+
+#-------------------------------------------------------------------------------------------------
+#--2. Inicialización de las variables y funciones del juego --------------------------------------
+#-------------------------------------------------------------------------------------------------
+
 tamano = (1400,800)  # tamaño de la ventana
 ruta_fondo = 'Imagenes/espacio3.jpeg' #ruta de la imagen de fondo
 reloj = pygame.time.Clock()
@@ -22,7 +44,8 @@ meteoritos = pygame.sprite.Group() #Grupo con todos los objetos de meteoritos
 
 # Configuración del temporizador para meteoritos
 generador_meteoritos = pygame.USEREVENT + 1  # Evento personalizado
-pygame.time.set_timer(generador_meteoritos, 1300)  # Generar cada 1.3 segundos (1300 milisegundos)
+dificultad = 1300 # variable que controla el tiempo de aparición de los meteoritos
+pygame.time.set_timer(generador_meteoritos,dificultad)  # Generar cada 1.3 segundos (1300 milisegundos)
 sonido_meteorito = pygame.mixer.Sound("sonidos/asteroid-hitting-something-152511.mp3") # sonido de colision con meteorito
 
 
@@ -64,6 +87,10 @@ canal1 = pygame.mixer.Channel(0)
 canal2 = pygame.mixer.Channel(1)
 canal3 = pygame.mixer.Channel(2)
 
+#-------------------------------------------------------------------------------------------------
+#------------------------------------ INICIO DEL JUEGO -------------------------------------------
+#-------------------------------------------------------------------------------------------------
+
 
 while running:
     
@@ -101,6 +128,7 @@ while running:
                 estado = "jugando"
                 vidas = 3
                 puntuacion = 0
+                dificultad = 1300
 
     if estado == "inicio": 
         
@@ -133,6 +161,10 @@ while running:
             #Revisa con cuantas colisiono y multiplica por 10 (para dar la puntuacion en multiplos de 10)
             puntuacion += (len(colisiones_monedas)) * 10
             #Cada moneda da 10 puntos
+            if puntuacion % 50 == 0: # se aumenta la aparición cada 50 puntos
+                if dificultad > 450: # se establece limite
+                    pygame.time.set_timer(generador_meteoritos,dificultad)  # actualizamos el timer para generar los objetos
+                    dificultad -= 150 #se disminuye en 150 milisegundos
             
         #Actualizar la posicion de todos los sprites
         sprites.update()
@@ -146,6 +178,7 @@ while running:
         # Mostrar las vidas en la esquina inferior derecha
         mensaje_vidas = font_punt.render("Vidas: {}".format(vidas),True,(255,255,255))
         ventana.blit(mensaje_vidas, (tamano[0] - 570, tamano[1] - 100))
+
         reloj.tick(250)
         
     elif estado == "fin":
@@ -157,12 +190,3 @@ while running:
         sprites.empty() 
         meteoritos.empty()
     pygame.display.flip() # actualización de la pantalla
-        
-
-
-
-
-
-
-
-

@@ -15,10 +15,6 @@ def color(frame, tamano):
     # Aplicar espejado horizontal (modo espejo)
     frame_espejo = cv2.flip(frame_redimensionado, 1)
     
-    
-    
-    
-    
     # Convertir la imagen a espacio de color HSV
     hsv = cv2.cvtColor(frame_espejo, cv2.COLOR_BGR2HSV)
 
@@ -42,14 +38,12 @@ def lectura(jugador, tamano, camara):
     # Detectar el color naranja en el fotograma actual
     mascara, frame_espejo, hsv  = color(frame,tamano)
 
-
     #Frame que se muestra en el juego
     frame_redimensionado2 = cv2.resize(frame_espejo, (376,376))
     frame_redimensionado2 = cv2.cvtColor(frame_redimensionado2, cv2.COLOR_BGR2RGB) #Convierte a rgb
     frame_redimensionado2 = cv2.flip(frame_redimensionado2, 1)
     frame_py = np.rot90(frame_redimensionado2)
     frame_py = pygame.surfarray.make_surface(frame_py)
-    
     
     # Encontrar los contornos en la máscara de color naranja
     contornos, _ = cv2.findContours(mascara, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -68,9 +62,6 @@ def lectura(jugador, tamano, camara):
             # Dibujar un círculo en el centro del objeto naranja
             cv2.circle(frame_espejo, (cX, cY), 7, (255, 255, 255), -1)
             
-            
-            
-
             # Mostrar las direcciones detectadas en la pantalla
             cv2.putText(frame_espejo, f"Direccion X: {cX}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
             cv2.putText(frame_espejo, f"Direccion Y: {cY}", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
@@ -82,7 +73,6 @@ def lectura(jugador, tamano, camara):
             frame_py = np.rot90(frame_redimensionado2)
             frame_py = pygame.surfarray.make_surface(frame_py)
 
-            
             #Actualizar Jugador 
             #...............
             jugador.posicion(cX,cY)
@@ -98,13 +88,6 @@ def lectura(jugador, tamano, camara):
     frame_bin = np.rot90(frame_redimensionado3)    
     frame_bin = pygame.surfarray.make_surface(frame_bin)
     
-    
-    """
-    # Mostrar dos ventanas separadas: una con la detección de color naranja y otra con la imagen binaria
-    cv2.imshow("Orange Color Detection", frame_espejo)
-    cv2.imshow("Orange Binary Image", binario)
-    """
-
     if cv2.waitKey(1) & 0xFF == ord('q'):
         run=False
 
