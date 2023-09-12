@@ -6,8 +6,9 @@ import pygame
 def color(frame, tamano):
 
     # Definir un rango de color verde en HSV, color de referencia
-    inferior = np.array([60, 100, 20],np.uint8)  # Matiz mínimo, Saturación mínima, Valor mínimo [164,61,71]    [35, 90, 20]
-    superior = np.array([90, 255, 255],np.uint8)  # Matiz máximo, Saturación máxima, Valor máximo [164,61,71]   [85, 255, 255]
+    inferior = np.array([40, 40, 40],np.uint8)  # Valor mínimo de tono, saturación y valor (H, S, V)
+    superior = np.array([80, 255, 255],np.uint8)  # Valor máximo de tono, saturación y valor (H, S, V)
+
 
     # Redimensionar el fotograma al tamaño personalizado
     frame_redimensionado = cv2.resize(frame, tamano)
