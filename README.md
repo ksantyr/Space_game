@@ -53,7 +53,7 @@ Este juego se distribuye bajo la [MIT License]. Consulta el archivo LICENSE para
 
 ¡Disfruta de tu aventura espacial y que puedas alcanzar la puntuación más alta en Space Game! Si encuentras algún problema o tienes sugerencias para mejorar, no dudes en comunicarte y proporcionar comentarios.
 
-![Captura de Pantalla de Space Game]![space_game](https://github.com/ksantyr/Space_game/assets/62657690/8b632b8b-ed62-4fd1-bfd9-9df849b6ec96)
+¡[Captura de Pantalla de Space Game]![space_game](https://github.com/ksantyr/Space_game/assets/62657690/8b632b8b-ed62-4fd1-bfd9-9df849b6ec96)
 
 
 [¡Juega a Space Game ahora!]
@@ -118,7 +118,8 @@ This game is distributed under the [MIT License]. See the LICENSE file for detai
 
 Enjoy your space adventure, and may you achieve the highest score in Space Game! If you encounter any issues or have suggestions for improvement, please feel free to reach out and provide feedback.
 
-![Space Game Screenshot](screenshot.png](https://github.com/ksantyr/Space_game/assets/62657690/8b632b8b-ed62-4fd1-bfd9-9df849b6ec96))
+![Space Game Screenshot][space_game](https://github.com/ksantyr/Space_game/assets/62657690/8b632b8b-ed62-4fd1-bfd9-9df849b6ec96)
+
 
 
 [Play Space Game now!]
