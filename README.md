@@ -49,7 +49,7 @@ Space Game fue desarrollado por [Victor Arbeláez y Kevin Restrepo].
 
 ## Licencia
 
-Este juego se distribuye bajo la [MIT License]. Consulta el archivo LICENSE para obtener más detalles.
+Este juego se distribuye bajo la [MIT License] (Licencia de código abierto).
 
 ¡Disfruta de tu aventura espacial y que puedas alcanzar la puntuación más alta en Space Game! Si encuentras algún problema o tienes sugerencias para mejorar, no dudes en comunicarte y proporcionar comentarios.
 
@@ -114,7 +114,7 @@ Space Game was developed by [Victor Arbeláez and Kevin Restrepo].
 
 ## License
 
-This game is distributed under the [MIT License]. See the LICENSE file for details.
+This game is distributed under the [MIT License]. (Open Source license).
 
 Enjoy your space adventure, and may you achieve the highest score in Space Game! If you encounter any issues or have suggestions for improvement, please feel free to reach out and provide feedback.
 
