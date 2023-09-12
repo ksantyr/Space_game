@@ -118,7 +118,7 @@ This game is distributed under the [MIT License]. See the LICENSE file for detai
 
 Enjoy your space adventure, and may you achieve the highest score in Space Game! If you encounter any issues or have suggestions for improvement, please feel free to reach out and provide feedback.
 
-![Space Game Screenshot][space_game](https://github.com/ksantyr/Space_game/assets/62657690/8b632b8b-ed62-4fd1-bfd9-9df849b6ec96)
+[Space_Game_Screenshot]![space_game](https://github.com/ksantyr/Space_game/assets/62657690/8b632b8b-ed62-4fd1-bfd9-9df849b6ec96)
 
 
 
