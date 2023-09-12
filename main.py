@@ -182,7 +182,7 @@ while running:
         reloj.tick(250)
         
     elif estado == "fin":
-        estados.gameOver(ventana,font_punt)
+        estados.gameOver(ventana,font_punt,puntuacion)
         for i in sprites: # destruccion de objetos
             i.__del__()
         for i in meteoritos:
