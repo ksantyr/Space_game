@@ -46,7 +46,7 @@ def lectura(jugador, tamano, camara):
     frame_py = np.rot90(frame_redimensionado2)
     frame_py = pygame.surfarray.make_surface(frame_py)
     
-    # Encontrar los contornos en la máscara de color naranja
+    # Encontrar los contornos en la máscara de color verde
     contornos, _ = cv2.findContours(mascara, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     for contorno in contornos:
@@ -80,7 +80,7 @@ def lectura(jugador, tamano, camara):
             #sprites.update(ventana)
 
     # Crear una imagen binaria donde el objeto naranja es blanco y el resto negro
-    binario = cv2.bitwise_and(hsv, hsv, mask=mascara)
+    binario = cv2.bitwise_and(frame_espejo,frame_espejo, mask=mascara)
     
     #Frame que se muestra en el juego
     frame_redimensionado3 = cv2.resize(binario, (376,376))

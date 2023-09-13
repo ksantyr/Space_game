@@ -83,14 +83,16 @@ validar = 0
 pygame.mixer.set_num_channels(3)
 sonido_juego = pygame.mixer.Sound("sonidos/juego.mpeg")
 sonido_inicio = pygame.mixer.Sound("sonidos/inicio.mpeg")
+timer_sonido = pygame.USEREVENT + 3 # evento para reproducir la musica de fondo de forma indefinida
+# canales de reproducción de sonido
 canal1 = pygame.mixer.Channel(0)
 canal2 = pygame.mixer.Channel(1)
 canal3 = pygame.mixer.Channel(2)
+pygame.time.set_timer(timer_sonido,90000)  # Se repite al finalizar la canción
 
 #-------------------------------------------------------------------------------------------------
 #------------------------------------ INICIO DEL JUEGO -------------------------------------------
 #-------------------------------------------------------------------------------------------------
-
 
 while running:
     
@@ -129,6 +131,10 @@ while running:
                 vidas = 3
                 puntuacion = 0
                 dificultad = 1300
+        
+        if evento.type == timer_sonido and estado == "jugando": # control de reproducción del audio de juego
+             canal1.play(sonido_juego)
+        
 
     if estado == "inicio": 
         
